@@ -11,6 +11,9 @@ class MoedasPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Cripto Moedas'),
       ),
+      body: Center(
+        child: Text('oi'),
+      ),
     );
   }
 }
