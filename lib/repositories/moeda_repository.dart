@@ -34,7 +34,7 @@ class MoedaRepository {
     ),
     Moeda(
       icone: 'images/xrp.png',
-      nome: 'Xrp',
+      nome: 'XRP',
       sigla: 'XRP',
       preco: 2.52,
     ),
