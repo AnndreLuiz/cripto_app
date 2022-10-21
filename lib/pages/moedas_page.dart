@@ -1,3 +1,4 @@
+import 'package:criptomoedas_app/pages/moedas_detalhes.dart';
 import 'package:criptomoedas_app/repositories/moeda_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,13 +17,57 @@ class _MoedasPageState extends State<MoedasPage> {
   NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
   List<Moeda> selecionadas = [];
 
+  appBarDinamica() {
+    if (selecionadas.isEmpty) {
+      return AppBar(
+        title: const Text('Cripto Moedas'),
+        centerTitle: true,
+      );
+    } else {
+      return AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            setState(() {
+              selecionadas = [];
+            });
+          },
+        ),
+        title: Text('${selecionadas.length} seleciondas'),
+        backgroundColor: Colors.blueGrey[50],
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Colors.black87),
+        toolbarTextStyle: const TextTheme(
+          headline6: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ).bodyText2,
+        titleTextStyle: const TextTheme(
+          headline6: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ).headline6,
+      );
+    }
+  }
+
+  mostrarDetalhes(moeda) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MoedasDetalhesPage(moeda: moeda),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cripto Moedas'),
-        centerTitle: true,
-      ),
+      appBar: appBarDinamica(),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int moeda) {
           return ListTile(
@@ -32,7 +77,7 @@ class _MoedasPageState extends State<MoedasPage> {
               ),
             ),
             leading: (selecionadas.contains(tabela[moeda]))
-                ? CircleAvatar(
+                ? const CircleAvatar(
                     child: Icon(Icons.check),
                   )
                 : SizedBox(
@@ -59,12 +104,24 @@ class _MoedasPageState extends State<MoedasPage> {
                     : selecionadas.add(tabela[moeda]);
               });
             },
+            onTap: () => mostrarDetalhes(tabela[moeda]),
           );
         },
         padding: const EdgeInsets.all(10),
         separatorBuilder: (_, ___) => const Divider(),
         itemCount: tabela.length,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: selecionadas.isNotEmpty
+          ? FloatingActionButton.extended(
+              onPressed: () {},
+              icon: Icon(Icons.star),
+              label: Text(
+                'FAVORITAR',
+                style: TextStyle(letterSpacing: 0, fontWeight: FontWeight.bold),
+              ),
+            )
+          : null,
     );
   }
 }
