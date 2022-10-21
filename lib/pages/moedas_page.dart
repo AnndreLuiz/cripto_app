@@ -1,17 +1,23 @@
 import 'package:criptomoedas_app/repositories/moeda_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../models/models.dart';
 
-class MoedasPage extends StatelessWidget {
+class MoedasPage extends StatefulWidget {
   const MoedasPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final tabela = MoedaRepository.tabela;
-    NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
-    List<Moeda> selecionadas = [];
+  State<MoedasPage> createState() => _MoedasPageState();
+}
 
+class _MoedasPageState extends State<MoedasPage> {
+  final tabela = MoedaRepository.tabela;
+  NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
+  List<Moeda> selecionadas = [];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cripto Moedas'),
@@ -20,15 +26,19 @@ class MoedasPage extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (BuildContext context, int moeda) {
           return ListTile(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
             ),
-            leading: SizedBox(
-              width: 40,
-              child: Image.asset(tabela[moeda].icone),
-            ),
+            leading: (selecionadas.contains(tabela[moeda]))
+                ? CircleAvatar(
+                    child: Icon(Icons.check),
+                  )
+                : SizedBox(
+                    width: 40,
+                    child: Image.asset(tabela[moeda].icone),
+                  ),
             title: Text(
               tabela[moeda].nome,
               style: const TextStyle(
@@ -43,15 +53,16 @@ class MoedasPage extends StatelessWidget {
             selected: selecionadas.contains(tabela[moeda]),
             selectedTileColor: Colors.indigo[50],
             onLongPress: () {
-              (selecionadas.contains(tabela[moeda]))
-                  ? selecionadas.remove(tabela[moeda])
-                  : selecionadas.add(tabela[moeda]);
-              print(tabela[moeda].nome);
+              setState(() {
+                (selecionadas.contains(tabela[moeda]))
+                    ? selecionadas.remove(tabela[moeda])
+                    : selecionadas.add(tabela[moeda]);
+              });
             },
           );
         },
-        padding: EdgeInsets.all(10),
-        separatorBuilder: (_, ___) => Divider(),
+        padding: const EdgeInsets.all(10),
+        separatorBuilder: (_, ___) => const Divider(),
         itemCount: tabela.length,
       ),
     );
