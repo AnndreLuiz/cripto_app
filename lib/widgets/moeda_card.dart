@@ -1,7 +1,9 @@
 import 'package:criptomoedas_app/models/models.dart';
 import 'package:criptomoedas_app/pages/moedas_detalhes.dart';
+import 'package:criptomoedas_app/repositories/favoritas_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MoedaCard extends StatefulWidget {
   Moeda moeda;
@@ -68,6 +70,36 @@ class _MoedaCardState extends State<MoedaCard> {
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: precoColor['down']!.withOpacity(0.05),
+                  border: Border.all(
+                    color: precoColor['down']!.withOpacity(0.04),
+                  ),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  real.format(widget.moeda.preco),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: precoColor['down'],
+                    letterSpacing: -1,
+                  ),
+                ),
+              ),
+              PopupMenuButton(
+                icon: Icon(Icons.more_vert),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: ListTile(
+                      title: Text('Remover das Favoritas'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Provider.of<FavoritasRepository>(context, listen: false)
+                            .remove(widget.moeda);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

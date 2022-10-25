@@ -1,4 +1,5 @@
 import 'package:criptomoedas_app/repositories/favoritas_repository.dart';
+import 'package:criptomoedas_app/widgets/moeda_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class _FavoritasPageState extends State<FavoritasPage> {
                       return MoedaCard(moeda: favoritas.lista[index]);
                     },
                   );
-          },),
+          }),
         ),
       ),
     );
