@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MoedasPage extends StatefulWidget {
   const MoedasPage({super.key});
@@ -139,7 +138,8 @@ class _MoedasPageState extends State<MoedasPage> {
                     color: Colors.indigo,
                   ),
                 ),
-                if (favoritas.lista.contains(tabela[moeda]))
+                if (favoritas.lista
+                    .any((fav) => fav.sigla == tabela[moeda].sigla))
                   Icon(
                     Icons.circle,
                     color: Colors.amber,
