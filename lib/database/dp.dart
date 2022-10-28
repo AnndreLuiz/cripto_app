@@ -1,12 +1,13 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
 class DB {
-  //construtor com acesso privado
+  // Construtor com acesso privado
   DB._();
-  //criar uma instancia de DB
-  static final DB instace = DB._();
-  //instancia do SQLite
+  // Criar uma instancia de DB
+  static final DB instance = DB._();
+  //Instancia do SQLite
   static Database? _database;
 
   get database async {
@@ -31,7 +32,29 @@ class DB {
   }
 
   String get _conta => '''
-CREATE TABLE conta (
-  
-)''';
+    CREATE TABLE conta (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      saldo REAL
+    );
+  ''';
+
+  String get _carteira => '''
+    CREATE TABLE carteira (
+      sigla TEXT PRIMARY KEY,
+      moeda TEXT,
+      quantidade TEXT
+    );
+  ''';
+
+  String get _historico => '''
+    CREATE TABLE historico (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      data_operacao INT,
+      tipo_operacao TEXT,
+      moeda TEXT,
+      sigla TEXT,
+      valor REAL,
+      quantidade TEXT
+    );
+  ''';
 }

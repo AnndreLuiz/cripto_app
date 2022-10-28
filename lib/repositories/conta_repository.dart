@@ -21,14 +21,14 @@ class ContaRepository extends ChangeNotifier {
   }
 
   _getSaldo() async {
-    db = await DB.instace.database;
+    db = await DB.instance.database;
     List conta = await db.query('conta', limit: 1);
     _saldo = conta.first['saldo'];
     notifyListeners();
   }
 
   setSaldo(double valor) async {
-    db = await DB.instace.database;
+    db = await DB.instance.database;
     db.update('conta', {'saldo': valor});
     _saldo = valor;
     notifyListeners();
