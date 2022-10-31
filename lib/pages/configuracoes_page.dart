@@ -54,7 +54,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
     final valor = TextEditingController();
     final conta = context.read<ContaRepository>();
 
-    valor.text = conta.toString();
+    valor.text = conta.saldo.toString();
 
     AlertDialog dialog = AlertDialog(
       title: Text('Atualizar o Saldo'),
