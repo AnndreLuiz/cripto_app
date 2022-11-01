@@ -1,4 +1,4 @@
-import 'package:criptomoedas_app/models/models.dart';
+import 'package:criptomoedas_app/models/moeda.dart';
 import 'package:criptomoedas_app/pages/moedas_detalhes.dart';
 import 'package:criptomoedas_app/repositories/favoritas_repository.dart';
 import 'package:flutter/material.dart';

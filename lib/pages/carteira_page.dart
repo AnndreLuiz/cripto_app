@@ -1,4 +1,5 @@
 import 'package:criptomoedas_app/configs/app_settings.dart';
+import 'package:criptomoedas_app/models/historico.dart';
 import 'package:criptomoedas_app/models/posicao.dart';
 import 'package:criptomoedas_app/repositories/conta_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -57,6 +58,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
               ),
             ),
             loadGrafico(),
+            loadHistorico(),
           ],
         ),
       ),
@@ -141,10 +143,19 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     centerSpaceRadius: 100,
                     sections: loadCarteira(),
                     pieTouchData: PieTouchData(
-                      touchCallback: (touch) => setState(() {
-                        index = touch.touchedSection!.touchedSectionIndex;
-                        setGraficodados(index);
-                      }),
+                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                        setState(() {
+                          if (event.isInterestedForInteractions ||
+                              pieTouchResponse == null ||
+                              pieTouchResponse.touchedSection == null) {
+                            index = -1;
+                            return;
+                          }
+                          index = pieTouchResponse
+                              .touchedSection!.touchedSectionIndex;
+                          setGraficodados(index);
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -163,5 +174,25 @@ class _CarteiraPageState extends State<CarteiraPage> {
               ),
             ],
           );
+  }
+
+  loadHistorico() {
+    final historico = conta.historico;
+    final date = DateFormat('dd/MM/yyyy = hh:mm');
+    List<Widget> widgets = [];
+
+    for (var operacao in historico) {
+      widgets.add(ListTile(
+        title: Text(operacao.moeda.nome),
+        subtitle: Text(date.format(operacao.dataOperacao)),
+        trailing:
+            Text(real.format((operacao.moeda.preco * operacao.quantidade))),
+      ));
+      widgets.add(Divider());
+    }
+
+    return Column(
+      children: widgets,
+    );
   }
 }
