@@ -1,4 +1,4 @@
-import 'package:criptomoedas_app/models/models.dart';
+import 'package:criptomoedas_app/models/moeda.dart';
 
 class Posicao {
   Moeda moeda;
