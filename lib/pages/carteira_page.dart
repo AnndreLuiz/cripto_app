@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CarteiraPage extends StatefulWidget {
-  CarteiraPage({Key? key}) : super(key: key);
+  const CarteiraPage({Key? key}) : super(key: key);
 
   @override
   State<CarteiraPage> createState() => _CarteiraPageState();
@@ -16,7 +16,7 @@ class CarteiraPage extends StatefulWidget {
 class _CarteiraPageState extends State<CarteiraPage> {
   int index = 0;
   double totalCarteira = 0;
-  late double saldo = 0;
+  double saldo = 0;
   late NumberFormat real;
   late ContaRepository conta;
 
@@ -35,11 +35,11 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 48),
+        padding: const EdgeInsets.only(top: 48),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 48, bottom: 8),
               child: Text(
                 'Valor da Carteira',
@@ -50,7 +50,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
             ),
             Text(
               real.format(totalCarteira),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 35,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -1.5,
@@ -66,7 +66,6 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
   setTotalCarteira() {
     final carteiraList = conta.carteira;
-
     setState(() {
       totalCarteira = conta.saldo;
       for (var posicao in carteiraList) {
@@ -75,7 +74,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
     });
   }
 
-  setGraficodados(int index) {
+  setGraficoDados(int index) {
     if (index < 0) return;
 
     if (index == carteira.length) {
@@ -88,7 +87,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
   }
 
   loadCarteira() {
-    setGraficodados(index);
+    setGraficoDados(index);
     carteira = conta.carteira;
     final tamanhoLista = carteira.length + 1;
 
@@ -100,7 +99,6 @@ class _CarteiraPageState extends State<CarteiraPage> {
       final color = isTouched ? Colors.tealAccent : Colors.tealAccent[400];
 
       double porcentagem = 0;
-
       if (!isSaldo) {
         porcentagem =
             carteira[i].moeda.preco * carteira[i].quantidade / totalCarteira;
@@ -115,19 +113,20 @@ class _CarteiraPageState extends State<CarteiraPage> {
         title: '${porcentagem.toStringAsFixed(0)}%',
         radius: radius,
         titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87),
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
       );
     });
   }
 
   loadGrafico() {
     return (conta.saldo <= 0)
-        ? Container(
+        ? SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 200,
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator(),
             ),
           )
@@ -139,22 +138,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 child: PieChart(
                   PieChartData(
                     sectionsSpace: 5,
-                    centerSpaceRadius: 100,
+                    centerSpaceRadius: 120,
                     sections: loadCarteira(),
                     pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            index = -1;
-                            return;
-                          }
-                          index = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                          setGraficodados(index);
-                        });
-                      },
+                      touchCallback:
+                          (FlTouchEvent touch, PieTouchResponse? response) =>
+                              setState(() {
+                        index =
+                            response?.touchedSection?.touchedSectionIndex ?? 0;
+                        setGraficoDados(index);
+                      }),
                     ),
                   ),
                 ),
@@ -163,11 +156,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 children: [
                   Text(
                     graficoLabel,
-                    style: TextStyle(fontSize: 20, color: Colors.teal),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.teal,
+                    ),
                   ),
                   Text(
                     real.format(graficoValor),
-                    style: TextStyle(fontSize: 28),
+                    style: const TextStyle(
+                      fontSize: 28,
+                    ),
                   ),
                 ],
               ),
@@ -177,7 +175,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
   loadHistorico() {
     final historico = conta.historico;
-    final date = DateFormat('dd/MM/yyyy = hh:mm');
+    final date = DateFormat('dd/MM/yyyy - hh:mm');
     List<Widget> widgets = [];
 
     for (var operacao in historico) {
@@ -187,9 +185,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
         trailing:
             Text(real.format((operacao.moeda.preco * operacao.quantidade))),
       ));
-      widgets.add(Divider());
+      widgets.add(const Divider());
     }
-
     return Column(
       children: widgets,
     );

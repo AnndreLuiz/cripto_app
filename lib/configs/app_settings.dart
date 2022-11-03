@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings extends ChangeNotifier {
   // late SharedPreferences _prefs;
@@ -14,7 +15,7 @@ class AppSettings extends ChangeNotifier {
   }
 
   _startSettings() async {
-    await _startSettings();
+    await _startPreferences();
     await _readLocale();
   }
 
