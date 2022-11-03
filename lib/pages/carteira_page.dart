@@ -1,5 +1,4 @@
 import 'package:criptomoedas_app/configs/app_settings.dart';
-import 'package:criptomoedas_app/models/historico.dart';
 import 'package:criptomoedas_app/models/posicao.dart';
 import 'package:criptomoedas_app/repositories/conta_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
