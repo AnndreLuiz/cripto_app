@@ -3,7 +3,7 @@ import 'package:criptomoedas_app/models/historico.dart';
 import 'package:criptomoedas_app/models/moeda.dart';
 import 'package:criptomoedas_app/models/posicao.dart';
 import 'package:criptomoedas_app/repositories/moeda_repository.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ContaRepository extends ChangeNotifier {
@@ -13,9 +13,8 @@ class ContaRepository extends ChangeNotifier {
   double _saldo = 0;
 
   get saldo => _saldo;
-
-  List<Posicao> get carteira => carteira;
-  List<Historico> get historico => historico;
+  List<Posicao> get carteira => _carteira;
+  List<Historico> get historico => _historico;
 
   ContaRepository() {
     _initRepository();
@@ -52,7 +51,7 @@ class ContaRepository extends ChangeNotifier {
         where: 'sigla = ?',
         whereArgs: [moeda.sigla],
       );
-
+      // se nao tem moeda em carteira
       if (posicaoMoeda.isEmpty) {
         await txn.insert('carteira', {
           'sigla': moeda.sigla,
@@ -70,6 +69,7 @@ class ContaRepository extends ChangeNotifier {
           whereArgs: [moeda.sigla],
         );
       }
+
       //inserir a compra no historico
       await txn.insert('historico', {
         'sigla': moeda.sigla,
@@ -95,14 +95,16 @@ class ContaRepository extends ChangeNotifier {
         (m) => m.sigla == posicao['sigla'],
       );
       _carteira.add(Posicao(
-          moeda: moeda, quantidade: double.parse(posicao['quantidade'])));
+        moeda: moeda,
+        quantidade: double.parse(posicao['quantidade']),
+      ));
     });
     notifyListeners();
   }
 
   _getHistorico() async {
     _historico = [];
-    List operacoes = await db.query('carteira');
+    List operacoes = await db.query('historico');
     operacoes.forEach((operacao) {
       Moeda moeda = MoedaRepository.tabela.firstWhere(
         (m) => m.sigla == operacao['sigla'],
