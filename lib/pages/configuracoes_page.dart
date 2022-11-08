@@ -1,5 +1,6 @@
 import 'package:criptomoedas_app/configs/app_settings.dart';
 import 'package:criptomoedas_app/repositories/conta_repository.dart';
+import 'package:criptomoedas_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -43,6 +44,27 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               ),
             ),
             Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: OutlinedButton(
+                onPressed: () => context.read<AuthService>().logout(),
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'Sair do app',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
